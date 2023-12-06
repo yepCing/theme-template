@@ -1,5 +1,6 @@
 import Request from "..";
 import { IProjectInfo, IAccount, IAuth } from "./type";
+
 const authRequest = new Request({
   baseURL: process.env.VUE_APP_BASE_URL,
 });
