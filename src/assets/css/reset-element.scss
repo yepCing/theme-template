@@ -1,0 +1,49 @@
+.el-message-box {
+  padding: 0 88px;
+  border-radius: 12px;
+}
+.el-message-box__header {
+  text-align: center;
+}
+
+.el-message-box__btns {
+  justify-content: center;
+}
+
+.el-message {
+  top: 88px !important;
+}
+
+.el-message.success {
+  background: #efe3ff;
+  border: 1px solid #c395ff;
+  border-radius: 4px;
+  .el-message__content {
+    color: #000;
+  }
+}
+
+.el-message.normal {
+  background: #eeeef1;
+  border: 1px solid #d5d5dd;
+  border-radius: 4px;
+  .el-message__content {
+    color: #000;
+  }
+}
+.el-select-dropdown__item.selected {
+  color: #000;
+}
+.el-select-dropdown__item.hover {
+  background: rgba(140, 140, 161, 0.25);
+}
+.el-select__popper {
+  border-radius: 8px;
+  overflow: hidden;
+}
+.el-select .el-input__wrapper.is-focus {
+  box-shadow: none;
+}
+.el-select {
+  --el-select-input-focus-border-color: var(--el-border-color);
+}

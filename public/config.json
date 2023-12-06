@@ -1,0 +1,116 @@
+{
+  "config": [
+    {
+       "name": "Background",
+       "options": [
+          {
+              "type":"text",
+              "key":"background",
+              "value":"",
+              "placeholder":"https://"
+          }
+       ],
+       "tag": "Basic Info"
+    },
+    {
+       "name": "Bio",
+       "options": [
+          {
+              "type":"text",
+              "key":"bio",
+              "value":"就打算打算 了卡什么的啊啥的阿莱克斯都没拿快乐你打了快年底了卡你上课了呢哇发，吗阿列克纳的啊啥的阿莱克斯都没拿快乐你打了快年底了卡你上课了呢哇发，吗阿列克纳的啊啥的阿莱克斯都没拿快乐你打了快年底了卡你上课了呢哇发，吗阿列克纳的啊啥的阿莱克斯都没拿快乐你打了快年底了卡你上课了呢哇发，吗阿列克纳的啊啥的阿莱克斯都没拿快乐你打了快年底了卡你上课了呢哇发，吗阿列克纳的啊啥的阿莱克斯都没拿快乐你打了快年底了卡你上课了呢哇发，吗阿列克纳的啊啥的阿莱克斯都没拿快乐你打了快年底了卡你上课了呢哇发，吗阿列克纳的啊啥的阿莱克斯都没拿快乐你打了快年底了卡你上课了呢哇发，吗阿列克纳撒了你的啦开始到哪里可能是大陆可能的啦看",
+              "placeholder":"Enter the bio"
+          }
+       ],
+       "tag": "Basic Info"
+    },
+    {
+       "name": "IPFS Gateway",
+       "options": [
+          {
+              "type":"text",
+              "key":"ipfsGateway",
+              "value":"",
+              "placeholder":"Enter the IPFS gateway"
+          }
+       ],
+       "tag": "Basic Info"
+    },
+    {
+       "name": "Theme Name",
+       "options": [
+          {
+              "type":"text",
+              "key":"themeName",
+              "value":"4everland",
+              "placeholder":"Enter the registered theme name"
+          }
+       ],
+       "tag": "Basic Info"
+    },
+     {
+       "name": "Discord",
+       "options": [
+          {
+              "type":"text",
+              "key":"discord",
+              "value":"",
+              "placeholder":"https://"
+          }
+       ],
+       "tag": "Social Links"
+    },
+     {
+       "name": "Telegram",
+       "options": [
+          {
+              "type":"text",
+              "key":"telegram",
+              "value":"",
+              "placeholder":"https://"
+          }
+       ],
+       "tag": "Social Links"
+    },
+     {
+       "name": "Twitter",
+       "options": [
+          {
+              "type":"text",
+              "key":"twitter",
+              "value":"",
+              "placeholder":"https://"
+          }
+       ],
+       "tag": "Social Links"
+    },
+    {
+      "name": "Image CID",
+      "options": [
+         {
+            "type":"table",
+            "key":"imgCIDTable",
+            "headers": [
+               {
+               "text": "CID",
+               "value": "CID"
+               }
+            ],
+            "items": [
+               {"CID": "bafkreidrgwrvvb3czmxudft6rwjenrwflo6buchb2l7os6ca2uldvlh4we"},
+               {"CID": "bafkreibfo7ewkj7yspkqxs36lmlmtq4coqxbqsvqncoujskh7w76axxvvu"},
+               {"CID": "bafkreia5ijhfeakhkdbpdoi7gzcow6eff6vxivlli7pctudzzlvjttetta"},
+               {"CID": "bafybeid4s7ieyjqjfpfojfoiei4svzmxvlz5vawwjp4csupn22thbpv6o4"},
+               {"CID": "bafkreigbp7qn7xkwthypg2jjzufiagvbfgtd3raniaoq3ylkgnmt2e4emi"},
+               {"CID": "bafkreia5ijhfeakhkdbpdoi7gzcow6eff6vxivlli7pctudzzlvjttetta"},
+               {"CID": "bafkreia5ijhfeakhkdbpdoi7gzcow6eff6vxivlli7pctudzzlvjttetta"},
+               {"CID": "bafkreidrgwrvvb3czmxudft6rwjenrwflo6buchb2l7os6ca2uldvlh4we"},
+               {"CID": "bafkreibfo7ewkj7yspkqxs36lmlmtq4coqxbqsvqncoujskh7w76axxvvu"},
+               {"CID": "bafkreidrgwrvvb3czmxudft6rwjenrwflo6buchb2l7os6ca2uldvlh4we"}
+            ]
+         }
+      ],
+      "tag": "HomePage Image"
+    }
+  ]
+}
