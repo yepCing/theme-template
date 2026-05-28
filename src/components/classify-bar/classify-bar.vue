@@ -1,32 +1,42 @@
 <template>
   <div class="classify-bars-container al-c space-btw">
-    <div class="contributor al-c">
-      <div class="al-c">
-        <img src="@/assets/img/icon/img.svg" width="16" alt="" />
-        <span class="data-value ml-3">{{
-          projectInfo.posts.toLocaleString()
-        }}</span>
-      </div>
-      <div class="al-c ml-6">
-        <img src="@/assets/img/icon/contributor.svg" width="16" alt="" />
-        <span class="data-value ml-3">{{
-          projectInfo.participators.toLocaleString()
-        }}</span>
+    <select-cpm></select-cpm>
+
+    <div>
+      <div
+        class="upload-btn ml-8 al-c cursor-p"
+        @click="handleUpload(false)"
+        v-if="showUpload"
+      >
+        <img src="@/assets/img/icon/upload1.svg" width="32" alt="" />
+        <span class="ml-2 upload-text">UPLOAD</span>
       </div>
     </div>
-
-    <select-cpm></select-cpm>
   </div>
 </template>
 
 <script setup lang="ts">
 import SelectCpm from "@/components/select-cpm/select-cpm.vue";
-import { computed } from "vue";
 import { useStore } from "@/store";
+import emitBus from "@/utils/mitt";
+import { computed } from "vue";
+
 const store = useStore();
-const projectInfo = computed(() => {
-  return store.state.projectInfo ?? { posts: 0, participators: 0 };
+
+const showUpload = computed(() => {
+  if (!store.state.address) return false;
+  return (
+    store.state.overview.owner.toLocaleLowerCase() ==
+    store.state.address.toLocaleLowerCase()
+  );
 });
+const handleUpload = async (isMobile = false) => {
+  if (store.state.token) {
+    emitBus.emit("handleUpload", isMobile);
+  } else {
+    emitBus.emit("onShowConnect");
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -34,6 +44,9 @@ const projectInfo = computed(() => {
   .classify-bars-container {
     padding: 24px 16px !important;
     display: none !important;
+  }
+  .upload-btn {
+    display: none;
   }
 }
 :deep .el-input__wrapper {
@@ -43,16 +56,12 @@ const projectInfo = computed(() => {
 .classify-bars-container {
   padding: 24px 64px;
 }
-.contributor {
+.upload-btn {
   padding: 8px 16px;
-  border: 1px solid rgba(140, 140, 161, 0.25);
+  color: #0f172a;
+  font-weight: bold;
+  background: #f9cc45;
   border-radius: 8px;
-  .data-value {
-    font-family: "DIN Alternate";
-    color: #0e0e2c;
-    font-size: 24px;
-    line-height: 30px;
-    font-weight: bold;
-  }
+  letter-spacing: 0;
 }
 </style>

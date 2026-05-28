@@ -1,7 +1,6 @@
 <template>
   <div class="home-container">
     <classify-bar></classify-bar>
-
     <list-skeleton v-if="listLoading && !list.length"></list-skeleton>
     <div class="water-fall">
       <Waterfall
@@ -11,7 +10,7 @@
         :gutter="20"
         :hasAroundGutter="false"
         :loadProps="{ error }"
-        lazyload
+        :lazyload="false"
         :breakpoints="{
           1200: {
             rowPerView: 4,
@@ -31,7 +30,7 @@
               <avatar :address="item.creator"></avatar>
               <span class="address ml-2">{{ item.creator.cutStr(6, 6) }}</span>
             </div>
-            <div class="al-c">
+            <!-- <div class="al-c">
               <img
                 :src="
                   item.thumbed
@@ -44,7 +43,7 @@
                 @click.stop="onLike(item)"
               />
               <span class="ml-2">{{ getLikeNum(item.thumbs) }} </span>
-            </div>
+            </div> -->
           </div>
         </template>
       </Waterfall>
@@ -81,7 +80,7 @@
       </p>
       <p v-else class="ta-c fz-14">
         No content available to display.
-        <span class="cursor-p" @click="handleUpload" style="color: #9747ff"
+        <span class="cursor-p" @click="handleUpload" style="color: #f9cc45"
           >Upload</span
         >
         something now!
@@ -102,7 +101,7 @@ import "vue-waterfall-plugin-next/dist/style.css";
 import { ref, getCurrentInstance, ComponentInternalInstance } from "vue";
 import { fetchHomeList, handleThumbup } from "@/request/main/main";
 import { useStore } from "@/store";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import emitBus from "@/utils/mitt";
 import { debounce, getLikeNum } from "@/utils";
 import error from "@/assets/img/imgs/load-failed.png";
@@ -110,6 +109,8 @@ import { IItemInfo } from "@/request/type";
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 const store = useStore();
 const router = useRouter();
+const route = useRoute();
+const topic = route.path.split("/")[1];
 let list = ref<IItemInfo[]>([]);
 let curList = ref<IItemInfo[]>([]);
 let page = ref(1);
@@ -129,7 +130,7 @@ const getList = async (isReload = false, sortType = "DEFAULT") => {
       list.value = [];
     }
     listLoading.value = true;
-    const data = await fetchHomeList(store.state.topic, page.value, sortType);
+    const data = await fetchHomeList(topic, page.value, sortType);
     page.value++;
     list.value?.push(...data);
     curList.value = data;
@@ -149,14 +150,13 @@ const onLike = async (item: IItemInfo) => {
   proxy!.$loading("loading...");
   try {
     const code = await store.dispatch("getCode", { scope: "like" });
-    await handleThumbup(store.state.topic, item.id.toString(), code);
+    await handleThumbup(topic, item.id.toString(), code);
     list.value.find((it) => {
       if (it.id == item.id) {
         it.thumbed = true;
         it.thumbs += 1;
       }
     });
-    await store.dispatch("getUserInfo");
   } catch (error: any) {
     proxy!.$message({
       customClass: "normal",
@@ -168,7 +168,7 @@ const onLike = async (item: IItemInfo) => {
 };
 
 const handleDetail = ({ id }: { id: string }) => {
-  router.push("/detail/" + id);
+  router.push("/" + route.params.bucketName + "/detail/" + id);
 };
 
 const listenBottomOut = () => {
@@ -181,7 +181,6 @@ const listenBottomOut = () => {
     if (curList.value?.length) {
       getList();
     }
-    // console.log('bottom load')
     return;
   }
 };

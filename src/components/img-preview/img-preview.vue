@@ -32,9 +32,7 @@
 <script setup lang="ts">
 import { LazyImg } from "vue-waterfall-plugin-next";
 import { computed, ref, onMounted } from "vue";
-import { useStore } from "@/store";
 import { useRoute } from "vue-router";
-const store = useStore();
 const route = useRoute();
 const props = defineProps({
   cid: String,
@@ -54,11 +52,9 @@ const props = defineProps({
 const videoRef = ref<HTMLElement | null>(null);
 let minutes = ref<number | string>("0");
 let seconds = ref<number | string>("00");
-const gateway = computed(() => {
-  return store.state.gateway;
-});
+
 const url = computed(() => {
-  if (props.cid) return gateway.value + props.cid;
+  if (props.cid) return props.cid;
   return "";
 });
 const isDetailPage = computed(() => {

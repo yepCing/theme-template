@@ -23,7 +23,7 @@
       <img src="@/assets/img/icon/trash.svg" width="20" alt="" />
     </div>
     <div class="operation-bar al-c">
-      <div class="btn pa-2" @click.stop="onLike">
+      <!-- <div class="btn pa-2" @click.stop="onLike">
         <img
           :src="
             info.thumbed
@@ -33,8 +33,8 @@
           width="20"
           alt=""
         />
-      </div>
-      <div class="btn pa-2 ml-3" @click.stop="handleDownload(gateway, info)">
+      </div> -->
+      <div class="btn pa-2 ml-3" @click.stop="handleDownload(info)">
         <img src="@/assets/img/icon/download.svg" width="20" alt="" />
       </div>
       <div
@@ -73,11 +73,9 @@ const props = defineProps({
     required: true,
   },
 });
-const gateway = computed(() => {
-  return store.state.gateway;
-});
+
 const shareLink = computed(() => {
-  return store.state.gateway + props.info.cid;
+  return props.info.cid;
 });
 
 const handleSticked = async () => {
@@ -119,10 +117,8 @@ const handleDelete = async () => {
 
     await handleDeleteItem(store.state.topic, props.info.id, code);
     emitBus.emit("getList", true);
-    // Update User Info
-    await store.dispatch("getUserInfo");
     // Update List Length
-    await store.dispatch("getProjectInfo");
+    // await store.dispatch("getProjectInfo");
 
     proxy!.$message({
       customClass: "normal",
@@ -145,7 +141,6 @@ const onLike = async () => {
     const code = await store.dispatch("getCode", { scope: "like" });
     await handleThumbup(store.state.topic, props.info.id, code);
     emitBus.emit("updateInfo", { id: props.info.id, type: "like" });
-    await store.dispatch("getUserInfo");
   } catch (error: any) {
     proxy!.$message({
       customClass: "normal",

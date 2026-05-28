@@ -263,8 +263,7 @@
         </div>
       </template>
       <div class="my-10 ta-c content fw-b fz-16">
-        <span>Congratulations! </span><span>Points </span
-        ><span style="color: #9747ff">+1</span>
+        <span>Congratulations! </span>
       </div>
       <div class="btn cursor-p fz-20 ta-c py-3" @click="showSuccess = false">
         OK
@@ -274,6 +273,8 @@
 </template>
 
 <script setup lang="ts">
+import { uploadObject } from "@/gnfd-client/index";
+
 import {
   ref,
   computed,
@@ -284,24 +285,34 @@ import {
 import emitBus from "@/utils/mitt";
 import { useStore } from "@/store";
 import { handlePostRecord } from "@/request/main/main";
-import type { UploadFile, UploadRawFile, UploadInstance } from "element-plus";
+import {
+  type UploadFile,
+  type UploadRawFile,
+  type UploadInstance,
+  ElMessage,
+} from "element-plus";
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 const store = useStore();
 
 emitBus.off("handleUpload");
-emitBus.on("handleUpload", (isMobile) => {
-  if (isMobile) {
-    drawer.value = true;
-  } else {
-    showUpload.value = true;
+emitBus.on("handleUpload", async (isMobile) => {
+  try {
+    await store.dispatch("switchNetwork", process.env.VUE_APP_GREEN_CHAIN_ID);
+    if (isMobile) {
+      drawer.value = true;
+    } else {
+      showUpload.value = true;
+    }
+  } catch (error: any) {
+    ElMessage({
+      type: "error",
+      message: error.message,
+    });
   }
 });
 const showUpload = ref(false);
 const drawer = ref(false);
 const showSuccess = ref(false);
-const sdkAuthInfo = computed(() => {
-  return store.state.sdkStore.sdkAuthInfo;
-});
 
 const uploadDisabled = computed(() => {
   return (
@@ -331,12 +342,6 @@ const percentageColor = computed(() => {
   }
   return "#00EF99";
 });
-const bucketClient = computed(() => {
-  return store.state.sdkStore.bucketClient;
-});
-const pinningClient = computed(() => {
-  return store.state.sdkStore.pinningClient;
-});
 
 const handleConfirm = async () => {
   if (uploadDisabled.value) return;
@@ -346,42 +351,39 @@ const handleConfirm = async () => {
     uploadStatus.value = 1;
     uploadText.value =
       "Please stay on the page during the upload process to prevent any upload errors.";
-    await store.dispatch("getSts");
-
+    // await store.dispatch("getSts");
     percentage.value = 0;
-
-    const task = bucketClient.value!.uploadObject({
-      Bucket: sdkAuthInfo.value.accessBucket,
-      Key: sdkAuthInfo.value.folderPath + "/" + file.value!.name,
-      Body: file.value as File,
-      ContentType: file.value!.type,
-    });
-
-    task.progress((e: any) => {
-      percentage.value = (e.loaded! / e.total!) * 100;
-    });
-    const { cid } = await task.done();
-    const pininfo = await pinningClient.value!.addPin({
-      cid,
-    });
-    console.log(pininfo);
+    // console.log(typeof );
+    const data = await uploadObject(
+      file.value as File,
+      store.state.topic,
+      localStorage.getItem("address")!
+    );
+    percentage.value = 100;
     uploadStatus.value = 2;
+
     const code = await store.dispatch("getCode", { scope: "upload" });
 
     await handlePostRecord(store.state.topic, code, {
       title: title.value,
       description: desc.value,
       type: /image/.test(file.value!.type) ? "image" : "video",
-      cid,
+      cid: data?.link ?? "",
+      hash: data?.txnHash ?? "",
     });
-    // Update User Info
-    await store.dispatch("getUserInfo");
-    await store.dispatch("getProjectInfo");
+
+    // await store.dispatch("getProjectInfo");
     showUpload.value = false;
     drawer.value = false;
     showSuccess.value = true;
     emitBus.emit("getList", true);
   } catch (error: any) {
+    if (error instanceof Error) {
+      console.log(error.message);
+    }
+    if (error && typeof error === "object") {
+      console.log(JSON.stringify(error));
+    }
     console.log(error, "upload error");
     uploadStatus.value = 3;
     if (/Bucket quota exceeded/.test(error.message)) {
@@ -579,9 +581,9 @@ watch(file, (newVal) => {
     color: #f35950;
   }
   .confrim-btn {
-    background: #9747ff;
+    background: #f9cc45;
     border-radius: 12px;
-    color: #fff;
+    color: #0f172a;
     cursor: pointer;
   }
   .confrim-btn.loading {

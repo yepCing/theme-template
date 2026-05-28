@@ -22,7 +22,7 @@
       <div class="detail-info h-flex space-btw">
         <div class="info">
           <div class="info-header al-c space-btw">
-            <div class="al-c fz-14">
+            <!-- <div class="al-c fz-14">
               <span>CID: </span>
               <span class="ml-1">{{ info.cid.cutStr(5, 4) }}</span>
               <img
@@ -33,7 +33,7 @@
                 v-clipboard:copy="info.cid"
                 v-clipboard:success="onSuccess"
               />
-            </div>
+            </div> -->
             <div class="al-c">
               <img
                 v-if="store.getters.isManager || info.sticked"
@@ -61,6 +61,15 @@
           <div class="info-desc mt-4 fz-14">
             {{ info.content }}
           </div>
+
+          <div class="al-c mt-5">
+            <img src="@/assets/img/icon/bnb.svg" width="24" alt="" />
+            <span class="fz-14 ml-2">
+              <a class="scan-link" :href="scanLink" target="__blank">{{
+                info.hash.cutStr(6, 6)
+              }}</a>
+            </span>
+          </div>
           <div class="al-c mt-6">
             <avatar :address="info.creator"></avatar>
             <span class="ml-2">{{ info.creator.cutStr(6, 6) }}</span>
@@ -68,7 +77,7 @@
         </div>
         <div style="height: 50px"></div>
         <div class="opeartion-bar al-c space-btw">
-          <div class="al-c">
+          <!-- <div class="al-c">
             <img
               :src="
                 info.thumbed
@@ -81,10 +90,10 @@
               @click="onLike"
             />
             <span class="ml-2">{{ getLikeNum(info.thumbs) }} Like </span>
-          </div>
-          <div class="al-c">
+          </div> -->
+          <div class="al-c" style="margin-left: auto">
             <img
-              @click="handleDownload(store.state.gateway, info)"
+              @click="handleDownload(info)"
               src="@/assets/img/icon/download.svg"
               class="cursor-p"
               width="24"
@@ -136,7 +145,10 @@ const info = ref<IItemInfo>();
 const id = route.params.id as string;
 
 const shareLink = computed(() => {
-  return store.state.gateway + info.value?.cid;
+  return info.value?.cid;
+});
+const scanLink = computed(() => {
+  return process.env.VUE_APP_GREENFIELD_SCAN_URL! + info.value?.hash;
 });
 const getInfo = async () => {
   try {
@@ -197,7 +209,6 @@ const onLike = async () => {
 
     await handleThumbup(store.state.topic, id, code);
     await getInfo();
-    await store.dispatch("getUserInfo");
   } catch (error: any) {
     proxy!.$message({
       customClass: "normal",
@@ -214,10 +225,9 @@ const handleDelete = async () => {
 
     await handleDeleteItem(store.state.topic, info.value!.id.toString(), code);
     // Update User Info
-    await store.dispatch("getUserInfo");
     router.push("/home");
     // Update List Length
-    await store.dispatch("getProjectInfo");
+    // await store.dispatch("getProjectInfo");
     proxy!.$message({
       customClass: "normal",
       icon: Deleted,
@@ -299,5 +309,9 @@ getInfo();
       padding: 24px;
     }
   }
+}
+.scan-link {
+  color: #0175ff;
+  text-decoration: none;
 }
 </style>

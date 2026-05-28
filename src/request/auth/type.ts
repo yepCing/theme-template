@@ -15,3 +15,13 @@ export interface IAuth {
   token: string;
   expiredAt: number;
 }
+
+export interface Overview {
+  hiveName: string;
+  holds: string;
+  journal: string;
+  pool: string;
+  price: string;
+  total: string;
+  owner: string;
+}

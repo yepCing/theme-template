@@ -1,8 +1,6 @@
 <template>
   <div class="card-info cursor-p">
     <div class="mask"></div>
-    <!-- <LazyImg style="border-radius: 16px" :url="url" /> -->
-
     <img-preview :cid="item.cid" :type="item.type"></img-preview>
 
     <card-control class="control" :info="item"></card-control>
@@ -10,7 +8,6 @@
 </template>
 
 <script setup lang="ts">
-// import { LazyImg } from "vue-waterfall-plugin-next";
 import ImgPreview from "@/components/img-preview/img-preview.vue";
 import CardControl from "@/components/card-control/card-control.vue";
 import { IItemInfo } from "@/request/type";

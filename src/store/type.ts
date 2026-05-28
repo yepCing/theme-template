@@ -1,5 +1,6 @@
 import { IProjectInfo } from "@/request/type";
 import { ISdkRootState } from "./upload-client/type";
+import { Overview } from "@/request/auth/type";
 interface IUserInfo {
   posts: number;
   ratio: number;
@@ -13,8 +14,7 @@ interface IRootState {
   projectInfo: IProjectInfo | null;
   configObj: any;
   topic: string;
-  s3: any;
-  gateway: string;
+  overview: Overview;
 }
 
 interface IRootStateWithModule {

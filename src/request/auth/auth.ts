@@ -1,5 +1,5 @@
 import Request from "..";
-import { IProjectInfo, IAccount, IAuth } from "./type";
+import { IProjectInfo, IAccount, IAuth, Overview } from "./type";
 
 const authRequest = new Request({
   baseURL: process.env.VUE_APP_BASE_URL,
@@ -36,5 +36,14 @@ export const verifySignature = (
     data: {
       signature,
     },
+  });
+};
+
+export const fetchOverview = (topic: string, address?: string) => {
+  if (!address) {
+    address = "4everland";
+  }
+  return authRequest.get<Overview>({
+    url: `/hives/storage/${topic}/address/${address}/overview`,
   });
 };

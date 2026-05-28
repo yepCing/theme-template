@@ -12,6 +12,8 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
 import "@/assets/css/index.scss";
+import { VueQueryPlugin } from "@tanstack/vue-query";
+
 const app = createApp(App);
 app
   .use(store)
@@ -19,6 +21,5 @@ app
   .use(ElementPlus)
   .use(VueClipboard)
   .use(Messagebox)
+  .use(VueQueryPlugin)
   .mount("#app");
-
-store.dispatch("initProject");

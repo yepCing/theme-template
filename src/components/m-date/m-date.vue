@@ -1,56 +1,41 @@
 <template>
-  <div class="m-date mt-4">
-    <div class="al-c space-btw">
-      <div v-for="(item, index) in list" :key="index" class="al-c">
-        <img :src="item.img" width="16" alt="" />
-        <span class="ml-1">{{ item.value }}</span>
-      </div>
-    </div>
+  <div class="m-date al-c mt-4 space-btw">
     <select-cpm v-show="showSelect"></select-cpm>
+    <div
+      class="m-upload-btn ml-8 al-c cursor-p"
+      @click="handleUpload(true)"
+      v-if="showUpload"
+    >
+      <img src="@/assets/img/icon/upload1.svg" width="32" alt="" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useStore } from "vuex";
 import { useRoute } from "vue-router";
+import { useStore } from "@/store";
+import emitBus from "@/utils/mitt";
 import SelectCpm from "@/components/select-cpm/select-cpm.vue";
-const store = useStore();
 const route = useRoute();
-const userInfo = computed(() => {
-  return store.state.userInfo || {};
-});
-const projectInfo = computed(() => {
-  return store.state.projectInfo || {};
-});
-const list = computed(() => {
-  return [
-    {
-      img: require("@/assets/img/icon/img.svg"),
-      value: projectInfo.value.posts
-        ? projectInfo.value.posts.toLocaleString()
-        : "0",
-    },
-    {
-      img: require("@/assets/img/icon/contributor.svg"),
-      value: projectInfo.value.participators
-        ? projectInfo.value.participators.toLocaleString()
-        : "0",
-    },
-    {
-      img: require("@/assets/img/icon/user-posts.svg"),
-      value: userInfo.value.posts ? userInfo.value.posts.toLocaleString() : "0",
-    },
-    {
-      img: require("@/assets/img/icon/ratio.svg"),
-      value: userInfo.value.ratio ? userInfo.value.ratio + "%" : "0%",
-    },
-  ];
-});
-
+const store = useStore();
 const showSelect = computed(() => {
   return !/\/detail\//.test(route.path);
 });
+const showUpload = computed(() => {
+  if (!store.state.address) return false;
+  return (
+    store.state.overview.owner.toLocaleLowerCase() ==
+    store.state.address.toLocaleLowerCase()
+  );
+});
+const handleUpload = (isMobile = false) => {
+  if (store.state.token) {
+    emitBus.emit("handleUpload", isMobile);
+  } else {
+    emitBus.emit("onShowConnect");
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -61,7 +46,15 @@ const showSelect = computed(() => {
 }
 .m-date {
   display: none;
-  flex-direction: column;
   font-family: "DIN Alternate";
+}
+.m-upload-btn {
+  padding: 8px !important;
+  margin-left: 0px !important;
+  color: #fff;
+  font-weight: bold;
+  background: #f9cc45;
+  border-radius: 8px;
+  letter-spacing: 1px;
 }
 </style>

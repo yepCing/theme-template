@@ -33,8 +33,8 @@ export const throttle = (fn: () => void, delay: number) => {
   };
 };
 
-export const handleDownload = async (gateway: string, info: any) => {
-  const { data } = await axios.get(gateway + info.cid, {
+export const handleDownload = async (info: any) => {
+  const { data } = await axios.get(info.cid, {
     responseType: "blob",
   });
   const url = window.URL.createObjectURL(data);

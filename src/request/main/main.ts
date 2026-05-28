@@ -1,5 +1,6 @@
 import Request from "..";
-import { IItemInfo, PostRecord } from "./type";
+import { PostRecord, Holder, Trade } from "./type";
+import { IItemInfo } from "../type";
 const mainRequest = new Request({
   baseURL: process.env.VUE_APP_BASE_URL,
 });
@@ -52,5 +53,16 @@ export const handlePostRecord = (
   return mainRequest.post<void>({
     url: `/${topic}/posts?code=${code}`,
     data,
+  });
+};
+
+export const fetchTrades = (topic: string) => {
+  return mainRequest.get<Trade[]>({
+    url: `/hives/storage/${topic}/trades`,
+  });
+};
+export const fetchHolders = (topic: string) => {
+  return mainRequest.get<Holder[]>({
+    url: `/hives/storage/${topic}/holders`,
   });
 };
